@@ -2,13 +2,15 @@
 
 int main()
 {
+    //Declaracion de variables
     int cantidad_stock = 0, continuador = 1, id = 0, opcion, cantidad_de_venta, aumento_a_stock = -1;
-    float precio_unitario = 0.0, ganancias;
+    float precio_unitario, ganancias = 0.0;
     char nombre_producto;
 
-    while (continuador == 1)
+    while (continuador == 1) //Bucle principal del menú
     {
-        printf("------* Programa de gestion de un único producto *------");
+        //Despliegue del menú
+        printf("\n------* Programa de gestion de un único producto *------");
         printf("\n1. Registro.");
         printf("\n2. Vender producto.");
         printf("\n3. Consulta stock.");
@@ -16,124 +18,134 @@ int main()
         printf("\n5. Ganancias.");
         printf("\n6. Salir.");
         printf("\nOpción: ");
-        scanf("%d", &opcion);  
+        scanf("%d", &opcion);  //Entrada de dato de la variable 'opcion'
 
-        if (opcion < 1 || opcion > 6)
+        if (opcion < 1 || opcion > 6) //Condicional para determinar la opcion
         {
-            printf("\nOpción no válida.");
+            printf("\nOpción no válida."); //Mensaje de dato no válido para la variable
         }
 
-        if (opcion == 1)
+        if (opcion == 1) //Opcion de resgistro del producto
         {
-            while ( id < 10000000 || id > 99999999)
+            id = 0, cantidad_stock = 0, precio_unitario = 0; //Reinicio de las variables
+            while ( id < 10000000 || id > 99999999)  //Control de ingreso de variable con 8 digitos
             {
-                printf("\nID del producto (8 digitos): ");
-                scanf("%d", &id);
+                printf("ID del producto (8 digitos): ");
+                scanf("%d", &id);               //Ingreso del ID del producto
                 if (id < 10000000 || id > 99999999)
                 {
-                    printf("\nDato no válido.");
+                    printf("Dato no válido.\n"); //Mensaje de dato no válido para la variable
                 }
             }
 
-            while (cantidad_stock <= 0)
+            while (cantidad_stock <= 0) //Control de ingreso de cantidad del producto en stock
             {
                 printf("Cantidad en stock: ");
-                scanf("%d", &cantidad_stock);
+                scanf("%d", &cantidad_stock);   //Ingreso de la cantidad que hay en stock
                 
                 if (cantidad_stock <= 0)
                 {
-                    printf("\nDato no válido.");
+                    printf("Dato no válido.\n"); //Mensaje de dato no aceptable
                 }
             }
 
-            while (precio_unitario <= 0.0)
+            while (precio_unitario <= 0.0)  //Control de ingreso del precio por unidad
             {
                 printf("Ingrese valor del producto por unidad: ");
-                scanf("%f", &precio_unitario);
+                scanf("%f", &precio_unitario);           //Ingreso del precio por unidad
 
                 if(precio_unitario <= 0.0)
                 {
-                    printf("\nDato no válido.");
+                    printf("Dato no válido.\n"); //Mensaje de dato no válido para la variable
                 } 
             }
 
-            printf("Nombre del producto: ");
+            printf("Nombre del producto: "); //Ingreso del nombre del producto
             scanf("%s", &nombre_producto);
         }
 
-        if (opcion == 2)
+        if (opcion == 2) //Opcion de venta del producto
         {
-            if (id == 0)
+            if (id == 0) //Controlador para hacer que el usuario evite saltarse pasos
             {
-                printf("\nPrimero se debe resgistrar el producto.");
+                printf("\nPrimero se debe resgistrar el producto.");  //Mensaje de que aun no se ha registrado
             }
             else
             {
-                cantidad_de_venta = cantidad_stock + 1;
-                while (cantidad_de_venta > cantidad_stock)
+                cantidad_de_venta = 0;  //Reinicio de variable
+                cantidad_de_venta = cantidad_stock + 1; //Forzar a la variable entrar al bucle
+                while (cantidad_de_venta <= 0 || cantidad_de_venta > cantidad_stock)   //Control de entrada correcta de la variable
                 {
                     cantidad_de_venta = 0;
                     printf("Cantidad de unidades a vender: ");
-                    scanf("%d", &cantidad_de_venta);
+                    scanf("%d", &cantidad_de_venta);    //Entrada de la cantidad de producto a vender
 
-                    if (cantidad_de_venta > cantidad_stock)
+                    if (cantidad_de_venta <= 0 || cantidad_de_venta > cantidad_stock)
                     {
-                        printf("\nCantidad insuficiente en stock.");
+                        printf("Cantidad no en stock.\n");  //Mensaje de dato no válido para la variable
                     }
                 }
+                //Proceso para calcular las ganancias por cada venta hecha
+                ganancias = ganancias + (cantidad_de_venta * precio_unitario);
+                //Proceso para quitar del stock lo que se vendio
                 cantidad_stock = cantidad_stock - cantidad_de_venta;
             }
         }
 
-        if(opcion ==3)
+        if(opcion ==3)  //Opcion para verificar la cantidad de producto en stock
         {
             if (id == 0)
             {
-                printf("\nPrimero se debe resgistrar el producto.");
+                printf("\nPrimero se debe resgistrar el producto.");    //Mensaje de que aun no se ha registrado
             }
             else
             {
-                printf("\nTotal en stock: %d", cantidad_stock);
+                printf("\nTotal en stock: %d", cantidad_stock); //Salida de cantidad en stock
             }
         }
 
-        if (opcion == 4)
+        if (opcion == 4)    //Opcion para agregar producto al stock
         {
-            while(aumento_a_stock <= 0)
+            if (id == 0)
             {
-                printf("\nCantidad de producto a agregar: ");
-                scanf("%d", &aumento_a_stock);
-
-                if(aumento_a_stock <= 0)
-                {
-                    printf("Cantidad no válida.");
-                }
+                printf("\nAún no se a registrado el producto.");    //Mensaje de que aun no se ha registrado
             }
-            cantidad_stock = cantidad_stock + aumento_a_stock;
-            aumento_a_stock = 0;
+            else
+            {
+                aumento_a_stock = 0;    //Reinicio de la variable
+                while(aumento_a_stock <= 0)     //Control de ingreso del aumento del stock
+                {
+                    printf("Cantidad de producto a agregar: ");
+                    scanf("%d", &aumento_a_stock);      //Entrada del aumento al stock
+
+                    if(aumento_a_stock <= 0)
+                    {
+                        printf("Cantidad no válida.\n");    //Mensaje de dato no válido para la variable
+                    }
+                }
+                cantidad_stock = cantidad_stock + aumento_a_stock;  //Proceso de aumento al stock
+            }
         }
 
-        if (opcion == 5)
+        if (opcion == 5)    //Opcion para mostrar las ganancias
         {
             if(id <= 0 || cantidad_de_venta <= 0)
             {
-                printf("\nAún no se ha registrado el producto o no se ha vendido.");
+                printf("\nAún no se ha registrado el producto o no se ha vendido.");    //Mensaje de que no se ha completado un paso anterior
             }
             else
             {
-                ganancias = cantidad_de_venta * precio_unitario;
-                printf("\nEl total de ganancias generadas son: %.2f", ganancias);
+                printf("\nEl total de ganancias generadas son: %.2f", ganancias);   //Salida de las ganancias generadas
             }
         }
 
-        if (opcion == 6)
+        if (opcion == 6)    //Opcion de salida del programa
         {
             printf("\nFin del programa. :)");
-            continuador = 0;
+            continuador = 0; //Cierre del bucle principal
         }
 
-        opcion = 0;
-        printf("\n");
+        opcion = 0;  //Reinicio de la variable opcion
     }  
 
     return 0;
