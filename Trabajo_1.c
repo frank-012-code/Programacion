@@ -3,9 +3,9 @@
 int main()
 {
     //Declaracion de variables
-    int cantidad_stock = 0, continuador = 1, id = 0, opcion, cantidad_de_venta, aumento_a_stock = -1;
-    float precio_unitario, ganancias = 0.0;
-    char nombre_producto;
+    int cantidad_stock = 0, continuador = 1, id = 0, opcion, cantidad_de_venta, aumento_a_stock = -1, descuento;
+    float precio_unitario, ganancias = 0.0, precio_con_descuento;
+    char nombre_producto [30];
 
     while (continuador == 1) //Bucle principal del menú
     {
@@ -61,11 +61,12 @@ int main()
             }
 
             printf("Nombre del producto: "); //Ingreso del nombre del producto
-            scanf("%s", &nombre_producto);
+            scanf("%s", nombre_producto);
         }
 
         if (opcion == 2) //Opcion de venta del producto
         {
+            descuento = -1;
             if (id == 0) //Controlador para hacer que el usuario evite saltarse pasos
             {
                 printf("\nPrimero se debe resgistrar el producto.");  //Mensaje de que aun no se ha registrado
@@ -85,8 +86,30 @@ int main()
                         printf("Cantidad no en stock.\n");  //Mensaje de dato no válido para la variable
                     }
                 }
-                //Proceso para calcular las ganancias por cada venta hecha
-                ganancias = ganancias + (cantidad_de_venta * precio_unitario);
+
+                while (descuento < 0 || descuento > 100)
+                {
+                    printf("Descuento aplicado al producto: (Ej. 20%%) ");
+                    scanf("%d", &descuento);
+
+                    if(descuento < 0 || descuento > 100)
+                    {
+                        printf("Cantidad no válida.\n");
+                    }
+                }
+
+                if(descuento == 0)
+                {
+                    //Proceso para calcular las ganancias por cada venta hecha
+                    ganancias = ganancias + (cantidad_de_venta * precio_unitario);
+                }
+                else
+                {
+                    //Proceso para calcular las ganancias con el descuento
+                    precio_con_descuento = precio_unitario * (1 - ((float)descuento / 100));
+                    ganancias = ganancias + (cantidad_de_venta * precio_con_descuento);
+                }
+
                 //Proceso para quitar del stock lo que se vendio
                 cantidad_stock = cantidad_stock - cantidad_de_venta;
             }
@@ -129,7 +152,7 @@ int main()
 
         if (opcion == 5)    //Opcion para mostrar las ganancias
         {
-            if(id <= 0 || cantidad_de_venta <= 0)
+            if(id <= 0 || ganancias == 0)
             {
                 printf("\nAún no se ha registrado el producto o no se ha vendido.");    //Mensaje de que no se ha completado un paso anterior
             }
